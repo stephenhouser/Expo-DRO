@@ -9,7 +9,7 @@ import { Button } from 'react-native-elements';
 // 	modeOptions: ['abs', 'inc'],
 // };
 
-export default function Axis({ name, value, units, mode, configuration }) {
+export default function Axis({ name, value, units, mode, configuration, handlers }) {
 
 	const zeroAxis = () => {
 		//setDisplayValue(Number(0.0).toFixed(configuration.decimal));
