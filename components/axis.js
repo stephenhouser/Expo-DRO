@@ -9,15 +9,7 @@ import { Button } from 'react-native-elements';
 // 	modeOptions: ['abs', 'inc'],
 // };
 
-export default function Axis({ name, value, units, mode, configuration, handlers }) {
-
-	const zeroAxis = () => {
-		//setDisplayValue(Number(0.0).toFixed(configuration.decimal));
-	};
-
-	const toggleUnits = () => {
-		configuration.toggleUnits(name);
-	}
+export default function Axis({ name, value, units, mode, configuration, zeroAxis }) {
 
 	const displayTitle = name + '(0)';
 	const displayValue = Number(value).toFixed(configuration.decimal);
@@ -43,10 +35,11 @@ export default function Axis({ name, value, units, mode, configuration, handlers
 	const firstUnit = configuration.unitOptions[0];
 	const secondUnit = configuration.unitOptions[1];
 
+
 	return (
 		<View style={styles.container}>
 			<View style={styles.prefix}>
-				<Button title={displayTitle} onPress={configuration.zeroAxis}/>
+				<Button title={displayTitle} onPress={() => zeroAxis(name)}/>
 			</View>
 			<View style={styles.content}>
 				<Text style={styles.backgroundText}>8888.888</Text>
@@ -57,7 +50,7 @@ export default function Axis({ name, value, units, mode, configuration, handlers
 					<Text style={ unitStyle(styles.firstUnit, displayUnits === firstUnit) } >{unitMarker(firstUnit)}</Text>
 					<Text style={ unitStyle(styles.secondUnit, displayUnits === secondUnit) } >{unitMarker(secondUnit)}</Text>
 				</View>
-				<Button title='abs/inc' onPress={toggleUnits}/>
+				<Button title='abs/inc' onPress={() => zeroAxis(name)}/>
 			</View>
 		</View>
 	  );
