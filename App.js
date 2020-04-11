@@ -1,14 +1,17 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { NavigationContainer, DarkTheme } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+// import { createStackNavigator } from '@react-navigation/stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+
+
 import { useFonts } from '@use-expo/font';
 import { AppLoading } from 'expo';
 
 import Main from './main';
 import DROHeader from './components/header';
 
-const Stack = createStackNavigator();
+const Drawer = createDrawerNavigator();
 
 const DROTheme = {
 	...DarkTheme,
@@ -29,7 +32,7 @@ export default function App() {
 	} else {
 		return (
 			<NavigationContainer theme={DROTheme}>
-				<Stack.Navigator
+				<Drawer.Navigator
 					style={styles.app}
 					screenOptions={{
 						header: () => (
@@ -37,8 +40,9 @@ export default function App() {
 						)
 					}}
 				>
-					<Stack.Screen name="ExpoDRO" component={Main} />
-				</Stack.Navigator>
+					<Drawer.Screen name="ExpoDRO" component={Main} />
+					<Drawer.Screen name="Settings" component={Main} />
+				</Drawer.Navigator>
 			</NavigationContainer>
 		);
 	}

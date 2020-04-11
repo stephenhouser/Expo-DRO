@@ -23,5 +23,11 @@
 
 * calculator mode -> transfer to axis
 
+
+@react-navigation/native
+@react-navigation/stack
+@react-navigation/drawer
+react-native-safe-area-context
+
 Menu Button -- for top menu?
 https://js.coach/react-native-menu-button?search=button&collection=React+Native

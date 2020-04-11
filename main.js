@@ -6,6 +6,7 @@ import SpindleSpeed, { spindleSpeedConfiguration } from './components/spindle-sp
 import ToggleButton, { Button } from './components/toggle-button';
 import Messages from './components/messages';
 import Controls from './components/controls';
+import DROHeader from './components/header';
 
 export default function Main() {
 
@@ -162,6 +163,7 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		flexDirection: 'column',
+		paddingTop: Expo.Constants.statusBarHeight,
 		// backgroundColor: 'black',
 	},
 	cross: {
