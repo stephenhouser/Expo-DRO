@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, FlatList  } from 'react-native';
-import { Button } from 'react-native-elements';
+// import { Button } from 'react-native-elements';
 
 import LinearAxis, { linearAxisConfiguration } from './components/linear-axis';
 import SpindleSpeed, { spindleSpeedConfiguration } from './components/spindle-speed';
-import ToggleButton from './components/toggle-button';
+import ToggleButton, { Button } from './components/toggle-button';
 import Messages from './components/messages';
+import Controls from './components/controls';
 
 export default function Main() {
 
@@ -147,12 +148,9 @@ export default function Main() {
 					<FlatList data={Object.keys(measurements)}
 						keyExtractor={item => item}
 						renderItem={renderMeasurement} />
-					{/* <FlatList data={axes} 
-						keyExtractor={item => item.name}
-						renderItem={renderMeasurement} /> */}
 				</View>
 				<View style={styles.controls}>
-					<Text>Controls</Text>
+					<Controls />
 					<Text>Points</Text>
 				</View>
 			</View>
@@ -160,23 +158,6 @@ export default function Main() {
 		</View>
 	  );
 }
-
-
-					// { axes.map((axis) => {
-					// 	if (axis.type == 'linear') {
-					// 		return (
-					// 			<LinearAxis key={axis.name} 
-					// 				name={axis.name} value={axis.value} units={axis.units} mode={axis.mode}
-					// 				zeroAxis={() => zeroAxis(axis.name)} 
-					// 				toggleMode={() => toggleMode(axis.name)} />
-					// 		);	
-					// 	} else {
-					// 		return (
-					// 			<Text style={{color: 'white'}}>Non-linear Axis.</Text>
-					// 		);
-					// 	}
-					// })}
-
 
 const styles = StyleSheet.create({
 	container: {

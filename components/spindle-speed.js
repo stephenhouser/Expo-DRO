@@ -88,6 +88,7 @@ const styles = StyleSheet.create({
 		// position: 'absolute',
 		// bottom: 0,
 		// right: 0,
+		marginTop: 'auto',
 		fontSize: 64,
 		fontFamily: 'DSEG7Classic-BoldItalic',
 		color: 'greenyellow',

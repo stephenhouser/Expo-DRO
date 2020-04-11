@@ -46,7 +46,6 @@ export default function LinearAxis({ name,
 		<View style={styles.container}>
 			<View style={styles.prefix}>
 				{leftComponent}
-				{/* {<Button title={displayTitle} onPress={zeroAxis} />} */}
 			</View>
 			<View style={styles.content}>
 				<Text style={styles.backgroundText}>{displayBackgroundValue}</Text>
@@ -60,7 +59,6 @@ export default function LinearAxis({ name,
 						{unitMarker(bottomUnit)}</Text>
 				</View>
 				{rightComponent}
-				{/* <ToggleButton onTitle='inc' offTitle='abs' value={mode === 'inc'} onValueChange={toggleMode} /> */}
 			</View>
 		</View>
 	);
@@ -104,6 +102,7 @@ const styles = StyleSheet.create({
 		// position: 'absolute',
 		// bottom: 0,
 		// right: 0,
+		marginTop: 'auto',
 		fontSize: 64,
 		fontFamily: 'DSEG7Classic-BoldItalic',
 		color: 'greenyellow',
@@ -115,6 +114,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 	},
+
 	unitsContainer: {
 		alignSelf: 'stretch',
 		justifyContent: 'space-between',
@@ -127,7 +127,6 @@ const styles = StyleSheet.create({
 	},
 	bottomUnit: {
 		fontSize: 22,
-		// includeFontPadding: false,
 		color: '#333',
 	},
 
