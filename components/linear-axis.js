@@ -48,14 +48,14 @@ export default function LinearAxis({ name,
 				{leftComponent}
 			</View>
 			<View style={styles.content}>
-				<Text style={styles.backgroundText}>{displayBackgroundValue}</Text>
-				<Text style={styles.valueText}>{displayValue}</Text>
+				<Text style={styles.backgroundText} numberOfLines={1} ellipsizeMode='head'>{displayBackgroundValue}</Text>
+				<Text style={styles.valueText} numberOfLines={1} ellipsizeMode='head'>{/*displayValue*/}</Text>
 			</View>
 			<View style={styles.postfix}>
 				<View style={styles.unitsContainer}>
-					<Text style={unitStyle(styles.topUnit, displayUnits === topUnit)} >
+					<Text style={unitStyle(styles.topUnit, displayUnits === topUnit)}>
 						{unitMarker(topUnit)}</Text>
-					<Text style={unitStyle(styles.bottomUnit, displayUnits === bottomUnit)} >
+					<Text style={unitStyle(styles.bottomUnit, displayUnits === bottomUnit)}>
 						{unitMarker(bottomUnit)}</Text>
 				</View>
 				{rightComponent}
@@ -83,7 +83,8 @@ const styles = StyleSheet.create({
 
 	// the value display
 	content: {
-		flex: 1,
+		// flex: 1,
+		flexGrow: 1,
 		backgroundColor: 'black',
 		position: 'relative',
 	},

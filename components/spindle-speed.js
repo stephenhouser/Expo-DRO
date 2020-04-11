@@ -3,7 +3,7 @@ import { StyleSheet, View, Text } from 'react-native';
 
 export const spindleSpeedConfiguration = {
 	type: 'spindle',
-	digits: 8,
+	digits: 6,
 	unitOptions: ['sfm', 'rpm'],
 	modeOptions: ['sfm', 'rpm'],
 };
@@ -36,13 +36,13 @@ export default function SpindleSpeed({ name,
 				{leftComponent}
 			</View>
 			<View style={styles.content}>
-				<Text style={styles.backgroundText}>{displayBackgroundValue}</Text>
-				<Text style={styles.valueText}>{displayValue}</Text>
+				<Text style={styles.backgroundText} numberOfLines={1} ellipsizeMode='head'>{displayBackgroundValue}</Text>
+				<Text style={styles.valueText} numberOfLines={1} ellipsizeMode='head'>{/*displayValue*/}</Text>
 			</View>
 			<View style={styles.postfix}>
 				<View style={styles.unitsContainer}>
-					<Text style={unitStyle(styles.firstUnit, displayUnits === firstUnit)} >{firstUnit}</Text>
-					<Text style={unitStyle(styles.secondUnit, displayUnits === secondUnit)} >{secondUnit}</Text>
+					<Text style={unitStyle(styles.firstUnit, displayUnits === firstUnit)}>{firstUnit}</Text>
+					<Text style={unitStyle(styles.secondUnit, displayUnits === secondUnit)}>{secondUnit}</Text>
 				</View>
 				{rightComponent}
 			</View>
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
 
 	// the value display
 	content: {
-		flex: 1,
+		flexGrow: 1,
 		backgroundColor: 'black',
 		position: 'relative',
 	},

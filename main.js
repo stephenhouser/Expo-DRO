@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, FlatList  } from 'react-native';
+import { Platform, StyleSheet, Text, View, FlatList  } from 'react-native';
+import Constants from 'expo-constants';
 
 import LinearAxis, { linearAxisConfiguration } from './components/linear-axis';
 import SpindleSpeed, { spindleSpeedConfiguration } from './components/spindle-speed';
 import ToggleButton, { Button } from './components/toggle-button';
 import Messages from './components/messages';
 import Controls from './components/controls';
-import DROHeader from './components/header';
 
 export default function Main() {
 
@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		flexDirection: 'column',
-		paddingTop: Expo.Constants.statusBarHeight,
+		paddingTop: Platform.OS === 'ios' ? Constants.statusBarHeight : 0,
 		// backgroundColor: 'black',
 	},
 	cross: {

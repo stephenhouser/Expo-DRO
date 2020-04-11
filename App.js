@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, StatusBar } from 'react-native';
 import { NavigationContainer, DarkTheme } from '@react-navigation/native';
 // import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -27,11 +27,14 @@ export default function App() {
 		'DSEG7Modern-BoldItalic': require('./assets/fonts-DSEG_v045/DSEG7-Modern/DSEG7Modern-BoldItalic.ttf')
 	});
 
+
+
 	if (!fontsLoaded) {
 		return <AppLoading />;
 	} else {
 		return (
 			<NavigationContainer theme={DROTheme}>
+				<StatusBar barStyle='light-content'  />
 				<Drawer.Navigator
 					style={styles.app}
 					screenOptions={{
