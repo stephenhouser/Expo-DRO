@@ -1,68 +1,38 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, FlatList } from 'react-native';
 
-import LinearAxis from './components/linear-axis';
+import LinearAxis, { linearAxisConfiguration } from './components/linear-axis';
+import SpindleSpeed, { spindleSpeedConfiguration } from './components/spindle-speed';
 import Messages from './components/messages';
 
 export default function Main() {
 
-	const spindleAxisConfiguration = {
-		digits: 8,
-		decimal: 4,
-		unitOptions: ['sfm', 'rpm'],
-		modeOptions: ['sfm', 'rpm'],
-	};
+	const [configurations, setConfigurations] = useState({
+		'X': { ...linearAxisConfiguration },
+		'Y': { ...linearAxisConfiguration },
+		'Z': { ...linearAxisConfiguration },
+		'R': { ...spindleSpeedConfiguration },
+	})
 
-	const [axes, setAxes] = useState([
-		{	name: 'X',
-			value: 12.123,
-			units: 'in',
-			mode: 'abs',
-			type: 'linear',
-		},
-		{	name: 'Y',
-			value: -32.00356,
-			units: 'in',
-			mode: 'abs',
-			type: 'linear',
-		},
-		{	name: 'Z',
-			value: 0.00,
-			units: 'in',
-			mode: 'abs',
-			type: 'linear',
-		},
-		{	name: 'W',
-			value: 12.123,
-			units: 'rpm',
-			mode: 'abs',
-			type: 'spindle',
-		}
-	]);
-
-	const findAxisNamed = (axisName) => {
-		var index = axes.findIndex(e => e.name === axisName);
-		return index;
-	}
+	const [measurements, setMeasurements] = useState({
+		'X': { value: 0.0, units: 'in', mode: 'abs' },
+		'Y': { value: 0.0, units: 'in', mode: 'abs' },
+		'Z': { value: 0.0, units: 'in', mode: 'abs' },
+		'R': { value: 0.0, units: 'rpm', mode: 'rpm' },
+	});
 
 	const zeroAxis = (axisName) => {
 		console.log('zeroAxis(' + axisName + ')');
-		var index = axes.findIndex(e => e.name === axisName);
-		if (index >= 0) {
-			var nAxes = axes.slice();	// copy the array so state reflects the change
-			nAxes[index].value = 0.0;
-			setAxes(nAxes);
+
+		const axis = measurements[axisName];
+		if (axis != undefined) {
+			var newState = {...measurements}
+			newState[axisName].value = (Math.random() * 100.0) - 33.0;
+			setMeasurements(newState);
 		}
 	}
 
 	const setValue = (axisName, newValue) => {
-		var index = axes.findIndex(e => e.name === axisName);
-		if (index >= 0) {
-
-		}
-		var axis = axes.slice(index, index+1)[0];
-		axis.value = newValue;
-
 	}
 
 	const setMode = (axisName, mode) => {
@@ -79,45 +49,42 @@ export default function Main() {
 	};
 
 	const renderMeasurement = ({item, index, separators}) => {
-		switch (item.type) {
-			case 'linear':
-				return (
-					<LinearAxis key={item.name} 
-						name={item.name} value={item.value} units={item.units} mode={item.mode}
-						zeroAxis={() => zeroAxis(item.name)} 
-						toggleMode={() => toggleMode(item.name)} />
-				);
-			case 'spindle':
-				return (
-					<Text style={{color: 'white'}}>Spindle speed.</Text>
-				);
+		const measurement = measurements[item];
+		const configuration = configurations[item];
+		if (measurement != undefined && configuration != undefined) {
+			switch (configuration.type) {
+				case 'linear':
+					return (
+						<LinearAxis	name={item}
+							value={measurement.value} units={measurement.units} mode={measurement.mode}
+							zeroAxis={() => zeroAxis(item)} 
+							toggleMode={() => toggleMode(item)} />
+					);
+				case 'spindle':
+					return (
+						<SpindleSpeed name={item}
+							value={measurement.value} units={measurement.units} mode={measurement.mode}
+							zeroSpeed={() => zeroAxis(item)} 
+							toggleMode={() => toggleMode(item)} />
+					);
+			}
 		}
 
 		return (
-			<Text style={{color: 'white'}}>Unknown Measurement</Text>
+			<Text style={{color: 'white'}}>Unknown Measurement {item}</Text>
 		);
 	}
-
-
 
 	return (
 		<View style={styles.container}>
 			<View style={styles.cross} >
 				<View style={styles.axes}>
-					{ axes.map((axis) => {
-						if (axis.type == 'linear') {
-							return (
-								<LinearAxis key={axis.name} 
-									name={axis.name} value={axis.value} units={axis.units} mode={axis.mode}
-									zeroAxis={() => zeroAxis(axis.name)} 
-									toggleMode={() => toggleMode(axis.name)} />
-							);	
-						} else {
-							return (
-								<Text style={{color: 'white'}}>Non-linear Axis.</Text>
-							);
-						}
-					})}
+					<FlatList data={Object.keys(measurements)}
+						keyExtractor={item => item}
+						renderItem={renderMeasurement} />
+					{/* <FlatList data={axes} 
+						keyExtractor={item => item.name}
+						renderItem={renderMeasurement} /> */}
 				</View>
 				<View style={styles.controls}>
 					<Text>Controls</Text>
@@ -128,6 +95,23 @@ export default function Main() {
 		</View>
 	  );
 }
+
+
+					// { axes.map((axis) => {
+					// 	if (axis.type == 'linear') {
+					// 		return (
+					// 			<LinearAxis key={axis.name} 
+					// 				name={axis.name} value={axis.value} units={axis.units} mode={axis.mode}
+					// 				zeroAxis={() => zeroAxis(axis.name)} 
+					// 				toggleMode={() => toggleMode(axis.name)} />
+					// 		);	
+					// 	} else {
+					// 		return (
+					// 			<Text style={{color: 'white'}}>Non-linear Axis.</Text>
+					// 		);
+					// 	}
+					// })}
+
 
 const styles = StyleSheet.create({
 	container: {

@@ -2,35 +2,25 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { Button } from 'react-native-elements';
 
-export const linearAxisConfiguration = {
-	type: 'linear',
-	digits: 8,						// number of total digits to display.
-	decimal: 4,						// number of fixed digits after decimal place
-	unitOptions: ['in', 'mm'],		// must be two things here!	hardcoded below.
-	modeOptions: ['abs', 'inc'],	// must be two things here! hardcoded below.
+export const spindleSpeedConfiguration = {
+	type: 'spindle',
+	digits: 8,
+	unitOptions: ['sfm', 'rpm'],
+	modeOptions: ['sfm', 'rpm'],
 };
 
-export default function LinearAxis({ name, value, units, mode, zeroAxis, toggleMode }) {
+export default function SpindleSpeed({ name, value, units, mode, zeroSpeed, toggleMode }) {
 	
-	const configuration = linearAxisConfiguration;
+	const configuration = spindleSpeedConfiguration;
 
 	const displayTitle = name + '(0)';
-	const displayValue = Number(value).toFixed(configuration.decimal);
+	const displayValue = Number(value).toFixed(0);
 	const displayUnits = units;
 	const displayMode = mode;
-	const displayBackgroundValue = Number('8'.repeat(configuration.digits-configuration.decimal) + '.' + '8'.repeat(configuration.decimal));
+	const displayBackgroundValue = Number('8'.repeat(configuration.digits));
 
 	const firstUnit = configuration.unitOptions[0];
 	const secondUnit = configuration.unitOptions[1];
-
-	const unitMarker = (unitsDesignator) => {
-		// Special case for making inches show as double smart quote
-		if (unitsDesignator === 'in') {
-			return '”';
-		}
-
-		return unitsDesignator;
-	}
 
 	const unitStyle = (baseStyle, highlight) => {
 		if (highlight) {
@@ -43,7 +33,7 @@ export default function LinearAxis({ name, value, units, mode, zeroAxis, toggleM
 	return (
 		<View style={styles.container}>
 			<View style={styles.prefix}>
-				<Button title={displayTitle} onPress={zeroAxis} />
+				<Button title={displayTitle} onPress={zeroSpeed} />
 			</View>
 			<View style={styles.content}>
 				<Text style={styles.backgroundText}>{displayBackgroundValue}</Text>
@@ -51,8 +41,8 @@ export default function LinearAxis({ name, value, units, mode, zeroAxis, toggleM
 			</View>
 			<View style={styles.postfix}>
 				<View style={styles.unitsContainer}>
-					<Text style={unitStyle(styles.firstUnit, displayUnits === firstUnit)} >{unitMarker(firstUnit)}</Text>
-					<Text style={unitStyle(styles.secondUnit, displayUnits === secondUnit)} >{unitMarker(secondUnit)}</Text>
+					<Text style={unitStyle(styles.firstUnit, displayUnits === firstUnit)} >{firstUnit}</Text>
+					<Text style={unitStyle(styles.secondUnit, displayUnits === secondUnit)} >{secondUnit}</Text>
 				</View>
 				<Button title='abs/inc' onPress={toggleMode} />
 			</View>
@@ -113,15 +103,13 @@ const styles = StyleSheet.create({
 		alignSelf: 'stretch',
 		justifyContent: 'space-between',
 		marginRight: 10,
-		marginTop: -10,
 	},
 	firstUnit: {
-		fontSize: 42,
+		fontSize: 22,
 		color: '#333',
 	},
 	secondUnit: {
 		fontSize: 22,
-		// includeFontPadding: false,
 		color: '#333',
 	},
 
