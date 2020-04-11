@@ -21,31 +21,76 @@ export default function Main() {
 		'R': { value: 0.0, units: 'rpm', mode: 'rpm' },
 	});
 
-	const zeroAxis = (axisName) => {
-		console.log('zeroAxis(' + axisName + ')');
+	const zeroValue = (name) => {
+		console.log('zeroValue(' + name + ')');
+		setValue(name, 0.0);
+	}
 
-		const axis = measurements[axisName];
-		if (axis != undefined) {
+	const setValue = (name, newValue) => {
+		console.log('setValue(' + name + ',' + newValue + ')');
+
+		const measurement = measurements[name];
+		if (measurement != undefined) {
 			var newState = {...measurements}
-			newState[axisName].value = (Math.random() * 100.0) - 33.0;
+			newState[name].value = (Math.random() * 100.0) - 33.0;
 			setMeasurements(newState);
 		}
 	}
 
-	const setValue = (axisName, newValue) => {
-	}
+	const setMode = (name, newMode) => {
+		console.log('setMode(' + name + ',' + newMode + ')');
 
-	const setMode = (axisName, mode) => {
+		const measurement = measurements[name];
+		const configuration = configurations[name];
+		if (measurement != undefined && configuration != undefined) {
+			if (configuration.modeOptions.includes(newMode)) {
+				var newState = {...measurements}
+				newState[name].mode = newMode;
+				setMeasurements(newState);
+			}
+		}
 	};
 
-	const toggleMode = (axisName) => {
-		console.log('toggleMode(' + axisName + ')');
+	const toggleMode = (name) => {
+		console.log('toggleMode(' + name + ')');
+
+		const measurement = measurements[name];
+		const configuration = configurations[name];
+		if (measurement != undefined && configuration != undefined) {
+			if (measurement.mode == configuration.modeOptions[0]) {
+				setMode(name, configuration.modeOptions[1]);
+			} else {
+				setMode(name, configuration.modeOptions[0]);
+			}
+		}
 	}
 	
-	const setUnits = (axisName, units) => {
+	const setUnits = (name, newUnits) => {
+		console.log('setUnits(' + name + ',' + newUnits + ')');
+
+		const measurement = measurements[name];
+		const configuration = configurations[name];
+		if (measurement != undefined && configuration != undefined) {
+			if (configuration.unitOptions.includes(newUnits)) {
+				var newState = {...measurements}
+				newState[name].units = newUnits;
+				setMeasurements(newState);
+			}
+		}
 	};
 
-	const toggleUnits = (axisName) => {
+	const toggleUnits = (name) => {
+		console.log('toggleUnits(' + name + ')');
+
+		const measurement = measurements[name];
+		const configuration = configurations[name];
+		if (measurement != undefined && configuration != undefined) {
+			if (measurement.units == configuration.unitOptions[0]) {
+				setUnits(name, configuration.unitOptions[1]);
+			} else {
+				setUnits(name, configuration.unitOptions[0]);
+			}
+		}
 	};
 
 	const renderMeasurement = ({item, index, separators}) => {
@@ -57,14 +102,14 @@ export default function Main() {
 					return (
 						<LinearAxis	name={item}
 							value={measurement.value} units={measurement.units} mode={measurement.mode}
-							zeroAxis={() => zeroAxis(item)} 
+							zeroAxis={() => zeroValue(item)} 
 							toggleMode={() => toggleMode(item)} />
 					);
 				case 'spindle':
 					return (
 						<SpindleSpeed name={item}
 							value={measurement.value} units={measurement.units} mode={measurement.mode}
-							zeroSpeed={() => zeroAxis(item)} 
+							zeroSpeed={() => zeroValue(item)} 
 							toggleMode={() => toggleMode(item)} />
 					);
 			}

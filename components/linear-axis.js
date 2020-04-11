@@ -1,27 +1,87 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
-import { Button } from 'react-native-elements';
+import React from 'react';
+import { StyleSheet, View, TouchableHighlight } from 'react-native';
+import { Button, Text } from 'react-native-elements';
 
 export const linearAxisConfiguration = {
 	type: 'linear',
-	digits: 8,						// number of total digits to display.
-	decimal: 4,						// number of fixed digits after decimal place
+	displayDigits: 8,				// number of total digits to display.
+	displayDecimalPlaces: 4,		// number of fixed digits after decimal place
 	unitOptions: ['in', 'mm'],		// must be two things here!	hardcoded below.
 	modeOptions: ['abs', 'inc'],	// must be two things here! hardcoded below.
 };
 
-export default function LinearAxis({ name, value, units, mode, zeroAxis, toggleMode }) {
-	
-	const configuration = linearAxisConfiguration;
+export function ToggleButton({ value, onTitle, offTitle, onValueChange }) {
+
+	const formattedTopTitle = onTitle;
+	const formattedBottomTitle = offTitle;
+
+
+	const highlightStyle = (baseStyle, highlight) => {
+		if (highlight) {
+			return StyleSheet.compose(baseStyle, bStyles.highlight);
+		}
+
+		return baseStyle;
+	}
+
+	return (
+		<TouchableHighlight onPress={onValueChange}>
+			<View style={bStyles.container}>
+				<Text style={highlightStyle(bStyles.label, value)}>
+					{formattedBottomTitle}
+				</Text>
+				<View style={{backgroundColor: '#333', height: 2, width: 25}}></View>
+				<Text style={highlightStyle(bStyles.label, !value)}>
+					{formattedTopTitle}
+				</Text>
+			</View>
+		</TouchableHighlight>
+	);
+}
+
+const bStyles = StyleSheet.create({
+	container: {
+		flexDirection: 'column',
+		backgroundColor: 'black',	// same as overall background color 
+		borderColor: 'white',		// border around the component 
+		borderWidth: 1,
+		borderRadius: 5,
+		paddingTop: 5,
+		paddingBottom: 5,
+		paddingStart: 10,
+		paddingEnd: 10,
+		alignItems: 'center',
+	},
+
+	label: {
+		fontSize: 20,
+		color: '#333',
+		padding: 2,
+	},
+
+	// style to use to highlight things
+	highlight: {
+		color: 'greenyellow',
+	}
+});
+
+export default function LinearAxis({ name,
+	value, units, mode, 					// most changeable things...
+	zeroAxis, toggleMode, toggleUnits,		// button handlers
+	displayDigits, displayDecimalPlaces, 	// digit display options
+}) {
+
+	const showDigits = displayDigits || linearAxisConfiguration.displayDigits;
+	const showDecimalPlaces = displayDecimalPlaces || linearAxisConfiguration.displayDecimalPlaces;
 
 	const displayTitle = name + '(0)';
-	const displayValue = Number(value).toFixed(configuration.decimal);
-	const displayUnits = units;
-	const displayMode = mode;
-	const displayBackgroundValue = Number('8'.repeat(configuration.digits-configuration.decimal) + '.' + '8'.repeat(configuration.decimal));
+	const displayValue = Number(value).toFixed(showDecimalPlaces);
+	const displayUnits = units || linearAxisConfiguration.unitOptions[0];
+	const displayMode = mode || linearAxisConfiguration.modeOptions[0];
+	const displayBackgroundValue = Number('8'.repeat(showDigits - showDecimalPlaces) + '.' + '8'.repeat(showDecimalPlaces));
 
-	const firstUnit = configuration.unitOptions[0];
-	const secondUnit = configuration.unitOptions[1];
+	const topUnit = linearAxisConfiguration.unitOptions[0];
+	const bottomUnit = linearAxisConfiguration.unitOptions[1];
 
 	const unitMarker = (unitsDesignator) => {
 		// Special case for making inches show as double smart quote
@@ -51,10 +111,12 @@ export default function LinearAxis({ name, value, units, mode, zeroAxis, toggleM
 			</View>
 			<View style={styles.postfix}>
 				<View style={styles.unitsContainer}>
-					<Text style={unitStyle(styles.firstUnit, displayUnits === firstUnit)} >{unitMarker(firstUnit)}</Text>
-					<Text style={unitStyle(styles.secondUnit, displayUnits === secondUnit)} >{unitMarker(secondUnit)}</Text>
+					<Text style={unitStyle(styles.topUnit, displayUnits === topUnit)} >
+						{unitMarker(topUnit)}</Text>
+					<Text style={unitStyle(styles.bottomUnit, displayUnits === bottomUnit)} >
+						{unitMarker(bottomUnit)}</Text>
 				</View>
-				<Button title='abs/inc' onPress={toggleMode} />
+				<ToggleButton onTitle='inc' offTitle='abs' value={mode === 'inc'} onValueChange={toggleMode} />
 			</View>
 		</View>
 	);
@@ -115,11 +177,11 @@ const styles = StyleSheet.create({
 		marginRight: 10,
 		marginTop: -10,
 	},
-	firstUnit: {
+	topUnit: {
 		fontSize: 42,
 		color: '#333',
 	},
-	secondUnit: {
+	bottomUnit: {
 		fontSize: 22,
 		// includeFontPadding: false,
 		color: '#333',
