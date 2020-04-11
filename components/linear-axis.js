@@ -1,6 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, TouchableHighlight } from 'react-native';
-import { Button, Text } from 'react-native-elements';
+import { StyleSheet, View, Text } from 'react-native';
 
 export const linearAxisConfiguration = {
 	type: 'linear',
@@ -10,74 +9,17 @@ export const linearAxisConfiguration = {
 	modeOptions: ['abs', 'inc'],	// must be two things here! hardcoded below.
 };
 
-export function ToggleButton({ value, onTitle, offTitle, onValueChange }) {
-
-	const formattedTopTitle = onTitle;
-	const formattedBottomTitle = offTitle;
-
-
-	const highlightStyle = (baseStyle, highlight) => {
-		if (highlight) {
-			return StyleSheet.compose(baseStyle, bStyles.highlight);
-		}
-
-		return baseStyle;
-	}
-
-	return (
-		<TouchableHighlight onPress={onValueChange}>
-			<View style={bStyles.container}>
-				<Text style={highlightStyle(bStyles.label, value)}>
-					{formattedBottomTitle}
-				</Text>
-				<View style={{backgroundColor: '#333', height: 2, width: 25}}></View>
-				<Text style={highlightStyle(bStyles.label, !value)}>
-					{formattedTopTitle}
-				</Text>
-			</View>
-		</TouchableHighlight>
-	);
-}
-
-const bStyles = StyleSheet.create({
-	container: {
-		flexDirection: 'column',
-		backgroundColor: 'black',	// same as overall background color 
-		borderColor: 'white',		// border around the component 
-		borderWidth: 1,
-		borderRadius: 5,
-		paddingTop: 5,
-		paddingBottom: 5,
-		paddingStart: 10,
-		paddingEnd: 10,
-		alignItems: 'center',
-	},
-
-	label: {
-		fontSize: 20,
-		color: '#333',
-		padding: 2,
-	},
-
-	// style to use to highlight things
-	highlight: {
-		color: 'greenyellow',
-	}
-});
-
 export default function LinearAxis({ name,
-	value, units, mode, 					// most changeable things...
-	zeroAxis, toggleMode, toggleUnits,		// button handlers
+	value, units, 							// most changeable things...
+	leftComponent, rightComponent,			// left and right components to show
 	displayDigits, displayDecimalPlaces, 	// digit display options
-}) {
+	}) {
 
 	const showDigits = displayDigits || linearAxisConfiguration.displayDigits;
 	const showDecimalPlaces = displayDecimalPlaces || linearAxisConfiguration.displayDecimalPlaces;
 
-	const displayTitle = name + '(0)';
 	const displayValue = Number(value).toFixed(showDecimalPlaces);
 	const displayUnits = units || linearAxisConfiguration.unitOptions[0];
-	const displayMode = mode || linearAxisConfiguration.modeOptions[0];
 	const displayBackgroundValue = Number('8'.repeat(showDigits - showDecimalPlaces) + '.' + '8'.repeat(showDecimalPlaces));
 
 	const topUnit = linearAxisConfiguration.unitOptions[0];
@@ -103,7 +45,8 @@ export default function LinearAxis({ name,
 	return (
 		<View style={styles.container}>
 			<View style={styles.prefix}>
-				<Button title={displayTitle} onPress={zeroAxis} />
+				{leftComponent}
+				{/* {<Button title={displayTitle} onPress={zeroAxis} />} */}
 			</View>
 			<View style={styles.content}>
 				<Text style={styles.backgroundText}>{displayBackgroundValue}</Text>
@@ -116,7 +59,8 @@ export default function LinearAxis({ name,
 					<Text style={unitStyle(styles.bottomUnit, displayUnits === bottomUnit)} >
 						{unitMarker(bottomUnit)}</Text>
 				</View>
-				<ToggleButton onTitle='inc' offTitle='abs' value={mode === 'inc'} onValueChange={toggleMode} />
+				{rightComponent}
+				{/* <ToggleButton onTitle='inc' offTitle='abs' value={mode === 'inc'} onValueChange={toggleMode} /> */}
 			</View>
 		</View>
 	);

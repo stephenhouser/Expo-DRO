@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { StyleSheet, Text, View, FlatList  } from 'react-native';
+import { Button } from 'react-native-elements';
 
 import LinearAxis, { linearAxisConfiguration } from './components/linear-axis';
 import SpindleSpeed, { spindleSpeedConfiguration } from './components/spindle-speed';
+import ToggleButton from './components/toggle-button';
 import Messages from './components/messages';
 
 export default function Main() {
@@ -93,25 +95,43 @@ export default function Main() {
 		}
 	};
 
+	const renderLinearAxis = (axisName, axis, configuration) => {
+		return (
+			<LinearAxis	name={axisName}
+				value={axis.value} units={axis.units} mode={axis.mode}
+				leftComponent={
+					<Button title={axisName} onPress={() => zeroValue(axisName)} />
+				}
+				rightComponent={
+					<ToggleButton onTitle='abs' offTitle='inc' value={axis.mode === 'abs'}
+						onValueChange={() => toggleMode(axisName)} />
+				} 
+			/>
+		);
+	}
+
+	const renderSpindleSpeed = (spindleName, spindle, configuration) => {
+		return (
+			<SpindleSpeed name={spindleName}
+				value={spindle.value} units={spindle.units} mode={spindle.mode}
+				leftComponent={<Text style={{color: 'white'}}>RPM</Text>}
+				rightComponent={
+					<ToggleButton onTitle='rpm' offTitle='sfm' value={spindle.mode === 'rpm'} 
+						onValueChange={() => toggleMode(spindleName)} />
+				}
+			/>
+		);
+	}
+
 	const renderMeasurement = ({item, index, separators}) => {
 		const measurement = measurements[item];
 		const configuration = configurations[item];
 		if (measurement != undefined && configuration != undefined) {
 			switch (configuration.type) {
 				case 'linear':
-					return (
-						<LinearAxis	name={item}
-							value={measurement.value} units={measurement.units} mode={measurement.mode}
-							zeroAxis={() => zeroValue(item)} 
-							toggleMode={() => toggleMode(item)} />
-					);
+					return renderLinearAxis(item, measurement, configuration);
 				case 'spindle':
-					return (
-						<SpindleSpeed name={item}
-							value={measurement.value} units={measurement.units} mode={measurement.mode}
-							zeroSpeed={() => zeroValue(item)} 
-							toggleMode={() => toggleMode(item)} />
-					);
+					return renderSpindleSpeed(item, measurement, configuration);
 			}
 		}
 

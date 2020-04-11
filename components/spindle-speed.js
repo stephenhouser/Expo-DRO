@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import { Button } from 'react-native-elements';
 
 export const spindleSpeedConfiguration = {
 	type: 'spindle',
@@ -9,14 +8,15 @@ export const spindleSpeedConfiguration = {
 	modeOptions: ['sfm', 'rpm'],
 };
 
-export default function SpindleSpeed({ name, value, units, mode, zeroSpeed, toggleMode }) {
+export default function SpindleSpeed({ name, 
+	value, units, mode, 
+	leftComponent, rightComponent 
+	}) {
 	
 	const configuration = spindleSpeedConfiguration;
 
-	const displayTitle = name + '(0)';
 	const displayValue = Number(value).toFixed(0);
 	const displayUnits = units;
-	const displayMode = mode;
 	const displayBackgroundValue = Number('8'.repeat(configuration.digits));
 
 	const firstUnit = configuration.unitOptions[0];
@@ -33,7 +33,7 @@ export default function SpindleSpeed({ name, value, units, mode, zeroSpeed, togg
 	return (
 		<View style={styles.container}>
 			<View style={styles.prefix}>
-				<Button title={displayTitle} onPress={zeroSpeed} />
+				{leftComponent}
 			</View>
 			<View style={styles.content}>
 				<Text style={styles.backgroundText}>{displayBackgroundValue}</Text>
@@ -44,7 +44,7 @@ export default function SpindleSpeed({ name, value, units, mode, zeroSpeed, togg
 					<Text style={unitStyle(styles.firstUnit, displayUnits === firstUnit)} >{firstUnit}</Text>
 					<Text style={unitStyle(styles.secondUnit, displayUnits === secondUnit)} >{secondUnit}</Text>
 				</View>
-				<Button title='abs/inc' onPress={toggleMode} />
+				{rightComponent}
 			</View>
 		</View>
 	);
