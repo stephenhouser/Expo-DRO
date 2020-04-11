@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, FlatList  } from 'react-native';
-// import { Button } from 'react-native-elements';
 
 import LinearAxis, { linearAxisConfiguration } from './components/linear-axis';
 import SpindleSpeed, { spindleSpeedConfiguration } from './components/spindle-speed';
